@@ -1,11 +1,12 @@
 import cv2
+import numpy as np
 
 cap = cv2.VideoCapture(0)
-moving = cv2.createBackgroundSubtractorMOG2()
+_moving = cv2.createBackgroundSubtractorMOG2()
 
 while True:
     _, frame = cap.read()
-    moving = moving.apply(frame)
+    moving = _moving.apply(frame)
 
     cv2.imshow('original', frame)
     cv2.imshow('Moving', moving)
