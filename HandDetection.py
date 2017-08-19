@@ -6,8 +6,12 @@ import time
 cap = cv2.VideoCapture(0)
 
 # Decrease frame size
-cap.set(cv2.cv.CV_CAP_PROP_FRAME_WIDTH, 1000)
-cap.set(cv2.cv.CV_CAP_PROP_FRAME_HEIGHT, 600)
+
+# cap.set(cv2.CV_CAP_PROP_FRAME_WIDTH, 1000)
+# cap.set(cv2.CV_CAP_PROP_FRAME_HEIGHT, 600)
+
+cap.set(4, 800)
+cap.set(5, 600)
 
 
 def nothing(x):
@@ -76,7 +80,8 @@ while (1):
     ret, thresh = cv2.threshold(median, 127, 255, 0)
 
     # Find contours of the filtered frame
-    contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    # contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    jh, contours, _ = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
     # Draw Contours
     # cv2.drawContours(frame, cnt, -1, (122,122,0), 3)
@@ -85,10 +90,10 @@ while (1):
     # Find Max contour area (Assume that hand is in the frame)
     max_area = 100
     ci = 0
-    for i in range(len(contours)):
+    for i in range(len(contours) - 1):
         cnt = contours[i]
         area = cv2.contourArea(cnt)
-        if (area > max_area):
+        if area > max_area:
             max_area = area
             ci = i
 
