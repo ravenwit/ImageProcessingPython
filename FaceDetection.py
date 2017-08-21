@@ -10,19 +10,16 @@ USAGE:
 # Python 2/3 compatibility
 from __future__ import print_function
 
-import cv2
-
-# local modules
-from common import clock, draw_str
+import cv2, time
 
 
-def detect(img, cascade):
-    rects = cascade.detectMultiScale(img, scaleFactor=1.3, minNeighbors=4, minSize=(30, 30),
-                                     flags=cv2.CASCADE_SCALE_IMAGE)
-    if len(rects) == 0:
+def detect(img, _cascade):
+    _rects = _cascade.detectMultiScale(img, scaleFactor=1.3, minNeighbors=5)
+    if len(_rects) == 0:
         return []
-    rects[:,2:] += rects[:,:2]
-    return rects
+    _rects[:, 2:] += _rects[:, :2]
+    return _rects
+
 
 def draw_rects(img, rects, color):
     for x1, y1, x2, y2 in rects:
@@ -38,8 +35,8 @@ if __name__ == '__main__':
     except:
         video_src = 0
     args = dict(args)
-    cascade_fn = args.get('--cascade', "./haarcascade_frontalface.xml")
-    nested_fn  = args.get('--nested-cascade', "./haarcascade_eye.xml")
+    cascade_fn = args.get('--cascade', "haarcascade_frontalface.xml")
+    nested_fn  = args.get('--nested-cascade', "haarcascade_eye.xml")
 
     cascade = cv2.CascadeClassifier(cascade_fn)
     nested = cv2.CascadeClassifier(nested_fn)
@@ -47,11 +44,11 @@ if __name__ == '__main__':
     cam = cv2.VideoCapture(video_src)
 
     while True:
-        ret, img = cam.read()
+        _, img = cam.read()
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         gray = cv2.equalizeHist(gray)
 
-        t = clock()
+        t = time.time()
         rects = detect(gray, cascade)
         vis = img.copy()
         draw_rects(vis, rects, (0, 255, 0))
@@ -61,11 +58,15 @@ if __name__ == '__main__':
                 vis_roi = vis[y1:y2, x1:x2]
                 subrects = detect(roi.copy(), nested)
                 draw_rects(vis_roi, subrects, (255, 0, 0))
-        dt = clock() - t
+        dt = time.time() - t
 
-        draw_str(vis, (20, 20), 'time: %.1f ms' % (dt*1000))
+        font = cv2.FONT_HERSHEY_COMPLEX_SMALL
+        cv2.putText(vis, 'time: {} ms'.format(dt*1000), (20,20), font, .7, (200, 255, 200), 2, cv2.LINE_AA)
+
         cv2.imshow('facedetect', vis)
 
-        if cv2.waitKey(5) == 27:
+        if cv2.waitKey(1) & 0xFF == ord('q'):
             break
+
+
     cv2.destroyAllWindows()
