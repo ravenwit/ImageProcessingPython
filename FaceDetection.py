@@ -35,8 +35,8 @@ if __name__ == '__main__':
     except:
         video_src = 0
     args = dict(args)
-    cascade_fn = args.get('--cascade', "haarcascade_frontalface.xml")
-    nested_fn  = args.get('--nested-cascade', "haarcascade_eye.xml")
+    cascade_fn = args.get('--cascade', "./haarcascade_frontalface_default.xml")
+    nested_fn  = args.get('--nested-cascade', "./haarcascade_eye.xml")
 
     cascade = cv2.CascadeClassifier(cascade_fn)
     nested = cv2.CascadeClassifier(nested_fn)
@@ -61,12 +61,12 @@ if __name__ == '__main__':
         dt = time.time() - t
 
         font = cv2.FONT_HERSHEY_COMPLEX_SMALL
-        cv2.putText(vis, 'time: {} ms'.format(dt*1000), (20,20), font, .7, (200, 255, 200), 2, cv2.LINE_AA)
+        cv2.putText(vis, 'time: {} ms'.format(dt*1000), (20,20), font, .7, (0, 0, 0), 2, cv2.LINE_AA)
 
         cv2.imshow('facedetect', vis)
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
-
+    cam.release()
     cv2.destroyAllWindows()
