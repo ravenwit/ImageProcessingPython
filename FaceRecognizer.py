@@ -31,6 +31,7 @@ def draw_rects(img, rects, color):
 if __name__ == '__main__':
     print(__doc__)
 
+    args = getopt.getopt(sys.argv[1:], '', ['face-cascade=', 'eye-cascade=', 'identifier-cascades=', 'video-source='])
     # check parameters and set default value
     # each command will handle a function
     # get all xml file from train_data and load if recognise
