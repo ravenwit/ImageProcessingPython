@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 
-'''
+"""
 face detection using haar cascades
 
 USAGE:
     facedetect.py [--cascade <cascade_fn>] [--nested-cascade <cascade_fn>] [<video_source>]
-'''
+"""
 
 # Python 2/3 compatibility
 from __future__ import print_function
